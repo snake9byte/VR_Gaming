@@ -1,0 +1,108 @@
+
+
+# UPnP discovery UDP packet
+M-SEARCH * HTTP/1.1
+HOST: 239.255.255.250:1900
+MAN: "ssdp:discover"
+MX: 15
+ST: urn:Belkin:device:**
+
+
+# UPnP discovery response UDP packet
+HTTP/1.1 200 OK
+CACHE-CONTROL: max-age=86400
+DATE: {{.Date}}
+EXT:
+LOCATION: http://{{.ServerIP}}:{{.ServerPort}}/settings.xml
+OPT: "http://schemas.upnp.org/upnp/1/0/"; ns=01
+01-NLS: {{.UUID}}
+SERVER: Unspecified, UPnP/1.0, Unspecified
+X-User-Agent: redsonic
+ST: urn:Belkin:device:**
+USN: uuid:Socket-1_0-{{.UU}}::urn:Belkin:device:**
+
+
+# xml response payload for /settings.xml for belkin device
+
+<?xml version="1.0"?>
+<root>
+  <device>
+    <deviceType>urn:MakerMusings:device:controllee:1</deviceType>
+    <friendlyName>@@DEVICE_NAME@@</friendlyName>
+    <manufacturer>Belkin International Inc.</manufacturer>
+    <modelName>Emulated Socket</modelName>
+    <modelNumber>3.14159</modelNumber>
+    <UDN>uuid:Socket-1_0-@@DEVICE_UU@@</UDN>
+  </device>
+</root>
+
+
+# UPnP discovery packet sent for Hue device
+HTTP/1.1 200 OK
+CACHE-CONTROL: max-age=86400
+EXT:
+LOCATION: http://%s:%s/upnp/%s/setup.xml
+OPT: "http://schemas.upnp.org/upnp/1/0/"; ns=01
+01-NLS: %s
+ST: urn:schemas-upnp-org:device:basic:1
+USN: uuid:Socket-1_0-221438K0100073::urn:Belkin:device:**
+
+
+# xml payload sent to /upnp/control/basicevent1
+
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:SetBinaryState xmlns:u="urn:Belkin:service:basicevent:1">
+            <BinaryState>1</BinaryState>
+        </u:SetBinaryState>
+    </s:Body>
+</s:Envelope>
+
+# xml response to /upnp/<deviceid>/setup.xml for hue device
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+    <URLBase>http://%s:%s/</URLBase>
+    <device>
+        <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
+        <friendlyName>Amazon-Echo-HA-Bridge (%s)</friendlyName>
+        <manufacturer>Royal Philips Electronics</manufacturer>
+        <manufacturerURL>http://www.armzilla..com</manufacturerURL>
+        <modelDescription>Hue Emulator for Amazon Echo bridge</modelDescription>
+        <modelName>Philips hue bridge 2012</modelName>
+        <modelNumber>929000226503</modelNumber>
+        <modelURL>http://www.armzilla.com/amazon-echo-ha-bridge</modelURL>
+        <serialNumber>%s</serialNumber>
+        <UDN>uuid:%s</UDN>
+        <serviceList>
+            <service>
+                <serviceType>(null)</serviceType>
+                <serviceId>(null)</serviceId>
+                <controlURL>(null)</controlURL>
+                <eventSubURL>(null)</eventSubURL>
+                <SCPDURL>(null)</SCPDURL>
+            </service>
+        </serviceList>
+        <presentationURL>index.html</presentationURL>
+        <iconList>
+            <icon>
+                <mimetype>image/png</mimetype>
+                <height>48</height>
+                <width>48</width>
+                <depth>24</depth>
+                <url>hue_logo_0.png</url>
+            </icon>
+            <icon>
+                <mimetype>image/png</mimetype>
+                <height>120</height>
+                <width>120</width>
+                <depth>24</depth>
+                <url>hue_logo_3.png</url>
+            </icon>
+        </iconList>
+    </device>
+</root>
